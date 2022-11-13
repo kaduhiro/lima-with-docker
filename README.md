@@ -71,7 +71,7 @@ targets:
   list              list instances
   shell             execute shell
   up                create a new instance
-  alpine            create a alpine container
+  alpine            create an alpine container
   ssh-keyadd        add the public key for ssh connection
   ssh               ssh connection with the private key
   help              list available targets and some

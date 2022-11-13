@@ -26,7 +26,7 @@ up: # create a new instance
 	&& echo "export $$docker_host" | tee -a $(PROFILE) \
 	&& export $$docker_host
 
-alpine: # create a alpine container
+alpine: # create an alpine container
 	limactl shell $(LIMA_NAME) docker run -d -it --rm  -v $$HOME:$$HOME alpine:latest
 
 ssh-keyadd: # add the public key for ssh connection
