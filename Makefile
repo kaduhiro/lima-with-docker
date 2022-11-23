@@ -46,7 +46,21 @@ ssh: # ssh connection with the private key
 		-p $(SSH_PORT) \
 		$$USER@127.0.0.1
 
-.PHONY: up alpine ssh-keyadd ssh
+ssh-forward: # port forwarding for external connections
+	ssh -A \
+		-o StrictHostKeyChecking=no \
+		-o UserKnownHostsFile=/dev/null \
+		-i $(SSH_PRIVATE_KEY) \
+		-p $(SSH_PORT) \
+		$$USER@127.0.0.1 \
+		-g \
+		$$(for p in $(SSH_FORWARD_PORTS); do \
+			from=$$(echo $$p | cut -d':' -f1); \
+			to=$$(echo $$p | cut -d':' -f2); \
+			printf ' -L %d:127.0.0.1:%d ' $$from $${to:-$$from}; \
+		done)
+
+.PHONY: up alpine ssh-keyadd ssh ssh-forward
 
 help: # list available targets and some
 	@len=$$(awk -F':' 'BEGIN {m = 0;} /^[^\s]+:/ {gsub(/%/, "<service>", $$1); l = length($$1); if(l > m) m = l;} END {print m;}' $(MAKEFILE_LIST)) && \
